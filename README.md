@@ -7,6 +7,10 @@ To run the app, you'll need to run the servers for both front end and backend ap
 
 ([Link to Backend app instructions](./backend/toy-robot-simulator-backend/README.md))
 
+## Assumptions: 
+- Robot should default to rotate right if opposite direction selected for rotation (only possible with keyboard)
+- API should take in current robot id from the app, instead of knowing to move the latest. Improves query latency
+
 ## Initial Design Thoughts
 ### Tech Selection
 - NextJS
@@ -67,10 +71,6 @@ User Actions
 - Create table component with grid data structure
 - Create an function that populates / updates the grid
 - Connect state updates to UI and keyboard events
-
-### Assumptions: 
-- Robot should default to rotate right if opposite direction selected for rotation (only possible with keyboard)
-- API should take in current robot id from the app, instead of knowing to move the latest. Improves query latency
 
 ### Future Improvements
 - Use OOO / Class based architecture to improve SwaggerDocs
