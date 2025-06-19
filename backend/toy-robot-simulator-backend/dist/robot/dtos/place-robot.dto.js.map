@@ -1,1 +1,1 @@
-{"version":3,"file":"place-robot.dto.js","sourceRoot":"","sources":["../../../src/robot/dtos/place-robot.dto.ts"],"names":[],"mappings":";;;AAAA,MAAa,aAAa;IACxB,CAAC,CAAU;IACX,CAAC,CAAU;CACZ;AAHD,sCAGC"}
+{"version":3,"file":"place-robot.dto.js","sourceRoot":"","sources":["../../../src/robot/dtos/place-robot.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,6CAA8C;AAE9C,MAAa,aAAa;IAExB,CAAC,CAAS;IAGV,CAAC,CAAS;CACX;AAND,sCAMC;AAJC;IADC,IAAA,qBAAW,GAAE;;wCACJ;AAGV;IADC,IAAA,qBAAW,GAAE;;wCACJ"}

@@ -20,6 +20,8 @@ const rotate_robot_dto_1 = require("./dtos/rotate-robot.dto");
 const robot_service_1 = require("./robot.service");
 const move_robot_dto_1 = require("./dtos/move-robot.dto");
 const moves_service_1 = require("../moves/moves.service");
+const swagger_1 = require("@nestjs/swagger");
+const robot_1 = require("./robot");
 let RobotController = RobotController_1 = class RobotController {
     robotService;
     moveService;
@@ -34,66 +36,64 @@ let RobotController = RobotController_1 = class RobotController {
         if (!robot) {
             return undefined;
         }
-        const { x, y, facing, id } = robot;
-        const res = {
-            x: x,
-            y: y,
-            facing: facing,
-            robotId: id
-        };
-        console.log(`returning, ${JSON.stringify(res)}`);
-        return res;
+        this.logger.log('returning robot position');
+        return robot;
     }
     async place(placeRobotDto) {
         this.logger.log('place called');
         const { x, y } = placeRobotDto;
-        await this.robotService.placeRobot(x, y);
-        const { x: placedX, y: placedY, facing, id } = await this.robotService.getCurrentRobot();
+        const robot = await this.robotService.placeRobot(x, y);
+        const { x: placedX, y: placedY, facing, robotId, lastMove } = robot;
+        await this.moveService.writeMove(robotId, placedX, placedY, facing, lastMove);
         this.logger.log('place succesful');
-        return {
-            x: placedX,
-            y: placedY,
-            facing,
-            robotId: id
-        };
+        return robot;
     }
     async rotateFacing(rotateRobotDto) {
         this.logger.log('rotate called', rotateRobotDto);
         const { direction, facing, robotId } = rotateRobotDto;
         await this.robotService.rotateRobot(direction, facing, robotId);
-        const { x, y, facing: newFacing, id } = await this.robotService.getCurrentRobot();
+        const robot = await this.robotService.getCurrentRobot();
+        if (!robot) {
+            throw new common_1.InternalServerErrorException();
+        }
+        const { x, y, facing: newFacing, lastMove } = robot;
+        await this.moveService.writeMove(robotId, x, y, newFacing, lastMove);
         this.logger.log('rotate succesful');
-        return {
-            x,
-            y,
-            facing: newFacing,
-            robotId: id
-        };
+        return robot;
     }
     async moveRobot(moveRobotDto) {
         this.logger.log('move called');
         const { robotId, facing } = moveRobotDto;
         await this.robotService.moveRobot(robotId, facing);
-        const { x, y, lastMove, id } = await this.robotService.getCurrentRobot();
+        const robot = await this.robotService.getCurrentRobot();
+        if (!robot) {
+            throw new common_1.InternalServerErrorException();
+        }
+        const { x, y, lastMove } = robot;
         await this.moveService.writeMove(robotId, x, y, facing, lastMove);
         this.logger.log('move succesful');
-        return {
-            x,
-            y,
-            facing: facing,
-            robotId: id
-        };
+        return robot;
     }
 };
 exports.RobotController = RobotController;
 __decorate([
     (0, common_1.Get)('position'),
+    (0, swagger_1.ApiResponse)({
+        status: 201,
+        description: 'Current robot position succesfully returned',
+        type: robot_1.Robot
+    }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], RobotController.prototype, "currentPosition", null);
 __decorate([
     (0, common_1.Post)('place'),
+    (0, swagger_1.ApiResponse)({
+        status: 201,
+        description: 'New robot has been succesfully placed and returned',
+        type: robot_1.Robot
+    }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [place_robot_dto_1.PlaceRobotDto]),
@@ -101,6 +101,11 @@ __decorate([
 ], RobotController.prototype, "place", null);
 __decorate([
     (0, common_1.Put)('rotate'),
+    (0, swagger_1.ApiResponse)({
+        status: 201,
+        description: 'Robot has succesfully rotated',
+        type: robot_1.Robot
+    }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [rotate_robot_dto_1.RotateRobotDto]),
@@ -108,6 +113,11 @@ __decorate([
 ], RobotController.prototype, "rotateFacing", null);
 __decorate([
     (0, common_1.Put)('move'),
+    (0, swagger_1.ApiResponse)({
+        status: 201,
+        description: 'Robot has succesfully moved',
+        type: robot_1.Robot
+    }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [move_robot_dto_1.MoveRobotDto]),

@@ -12,17 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Robot = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 let Robot = class Robot extends sequelize_typescript_1.Model {
-    active;
     lastMove;
     x;
     y;
     facing;
 };
 exports.Robot = Robot;
-__decorate([
-    (0, sequelize_typescript_1.Column)({ defaultValue: false }),
-    __metadata("design:type", Boolean)
-], Robot.prototype, "active", void 0);
 __decorate([
     sequelize_typescript_1.Column,
     __metadata("design:type", Number)

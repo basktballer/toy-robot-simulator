@@ -1,6 +1,6 @@
 import { Logger, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Move } from 'src/robot/models/move.model';
+import { Move } from '../moves/models/move.model';
 
 @Injectable()
 export class MovesService {
@@ -9,19 +9,22 @@ export class MovesService {
     private moveModel: typeof Move,
   ) {}
 
-  private readonly logger = new Logger(MovesService.name)
+  private readonly logger = new Logger(MovesService.name);
 
-  async writeMove(robotId: string, x: number, y: number, facing: string, lastMove: number) {
-    this.logger.log('writing move')
-    this.moveModel.create(
-      {
-        robotId: robotId,
-        x: x,
-        y: y,
-        facing: facing,
-        moveNumber: lastMove + 1
-      }
-    )
-
+  async writeMove(
+    robotId: string,
+    x: number,
+    y: number,
+    facing: string,
+    lastMove: number,
+  ) {
+    this.logger.log('writing move');
+    await this.moveModel.create({
+      robotId: robotId,
+      x: x,
+      y: y,
+      facing: facing,
+      moveNumber: lastMove + 1,
+    });
   }
 }

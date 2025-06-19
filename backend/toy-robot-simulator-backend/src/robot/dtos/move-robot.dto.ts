@@ -1,6 +1,10 @@
-import { Facing } from "./rotate-robot.dto"
+import { ApiProperty } from '@nestjs/swagger';
+import { Facing } from './rotate-robot.dto';
 
 export class MoveRobotDto {
-  robotId: string
-  facing: Facing
+  @ApiProperty()
+  robotId: string;
+
+  @ApiProperty()
+  facing: Facing;
 }

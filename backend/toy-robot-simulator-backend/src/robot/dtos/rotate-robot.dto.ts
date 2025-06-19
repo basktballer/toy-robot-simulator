@@ -1,7 +1,14 @@
-export type RotationDirection = "left" | "right";
-export type Facing = "north" | "south" | "east" | "west"
+import { ApiProperty } from '@nestjs/swagger';
+
+export type RotationDirection = 'left' | 'right';
+export type Facing = 'north' | 'south' | 'east' | 'west';
 export class RotateRobotDto {
-  robotId: string
-  direction: RotationDirection
-  facing: Facing
+  @ApiProperty()
+  robotId: string;
+
+  @ApiProperty()
+  direction: RotationDirection;
+
+  @ApiProperty()
+  facing: Facing;
 }

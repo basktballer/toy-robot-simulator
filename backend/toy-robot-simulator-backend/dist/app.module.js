@@ -33,7 +33,7 @@ exports.AppModule = AppModule = __decorate([
                 autoLoadModels: true,
                 synchronize: true,
             }),
-            robot_module_1.RobotModule
+            robot_module_1.RobotModule,
         ],
         controllers: [app_controller_1.AppController, robot_controller_1.RobotController],
         providers: [app_service_1.AppService, robot_service_1.RobotService, moves_service_1.MovesService],

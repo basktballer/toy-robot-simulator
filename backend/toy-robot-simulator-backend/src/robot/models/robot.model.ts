@@ -1,20 +1,16 @@
-import { Table, Column, Model } from "sequelize-typescript";
+import { Table, Column, Model } from 'sequelize-typescript';
 
 @Table
 export class Robot extends Model {
-  @Column({ defaultValue: false })
-  active: boolean
+  @Column
+  lastMove: number;
 
   @Column
-  lastMove: number
+  x: number;
 
   @Column
-  x: number
+  y: number;
 
   @Column
-  y: number
-
-  @Column
-  facing: string
-
+  facing: string;
 }

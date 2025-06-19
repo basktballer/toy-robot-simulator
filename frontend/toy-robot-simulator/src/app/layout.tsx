@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Toy Robot Simulator",
-  description: "Developed by Eden Yeung",
+  description: "A fun game",
 };
 
 export default function RootLayout({

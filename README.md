@@ -72,16 +72,15 @@ User Actions
 - Robot should default to rotate right if opposite direction selected for rotation (only possible with keyboard)
 - API should take in current robot id from the app, instead of knowing to move the latest. Improves query latency
 
-### To do
-- Once over each file
-  - Make good use of interfaces throughout front end, then set up backend the same
-  - Remove use less logs
-  - Add comments
-- Document run steps, linked #README?
-- Write test cases
-
-### Nice to have
-- Batched writes to DB from the app
-- Websockets connection ? 
-- Store robot id in a cookie? Fetch latest
-- Clean up API Helpers into a Service that creates classes
+### Future Improvements
+- Use OOO / Class based architecture to improve SwaggerDocs
+- Clean up API Helpers on Frontend into a Service that creates classes from data received, validate data arriving
+- Split backend logic out of RobotController into Manager module
+- Add E2E tests
+- More extensive database error handling
+  - PlaceRobot if API called with values exceeding the table dimensions
+  - Misc Read/Write/Update errors
+- Nice to haves?
+  - Store robot id in a cookie? Fetch latest
+  - Local App State + Batched writes to DB from the app
+  - Support dynamic table resizing

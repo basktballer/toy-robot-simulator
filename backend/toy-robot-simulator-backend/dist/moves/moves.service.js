@@ -16,7 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MovesService = void 0;
 const common_1 = require("@nestjs/common");
 const sequelize_1 = require("@nestjs/sequelize");
-const move_model_1 = require("../robot/models/move.model");
+const move_model_1 = require("../moves/models/move.model");
 let MovesService = MovesService_1 = class MovesService {
     moveModel;
     constructor(moveModel) {
@@ -25,12 +25,12 @@ let MovesService = MovesService_1 = class MovesService {
     logger = new common_1.Logger(MovesService_1.name);
     async writeMove(robotId, x, y, facing, lastMove) {
         this.logger.log('writing move');
-        this.moveModel.create({
+        await this.moveModel.create({
             robotId: robotId,
             x: x,
             y: y,
             facing: facing,
-            moveNumber: lastMove + 1
+            moveNumber: lastMove + 1,
         });
     }
 };

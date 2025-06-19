@@ -13,7 +13,7 @@ const robot_service_1 = require("./robot.service");
 const sequelize_1 = require("@nestjs/sequelize");
 const robot_model_1 = require("./models/robot.model");
 const moves_service_1 = require("../moves/moves.service");
-const move_model_1 = require("./models/move.model");
+const move_model_1 = require("../moves/models/move.model");
 let RobotModule = class RobotModule {
 };
 exports.RobotModule = RobotModule;
@@ -22,7 +22,7 @@ exports.RobotModule = RobotModule = __decorate([
         imports: [sequelize_1.SequelizeModule.forFeature([robot_model_1.Robot, move_model_1.Move])],
         exports: [sequelize_1.SequelizeModule],
         controllers: [robot_controller_1.RobotController],
-        providers: [robot_service_1.RobotService, moves_service_1.MovesService]
+        providers: [robot_service_1.RobotService, moves_service_1.MovesService],
     })
 ], RobotModule);
 //# sourceMappingURL=robot.module.js.map

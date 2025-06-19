@@ -19,7 +19,7 @@ let AppService = class AppService {
     }
     getHello() {
         return {
-            message: 'Hello World!'
+            message: 'Hello World!',
         };
     }
 };

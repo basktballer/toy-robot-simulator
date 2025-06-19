@@ -21,7 +21,7 @@ import { MovesService } from './moves/moves.service';
       autoLoadModels: true,
       synchronize: true,
     }),
-    RobotModule
+    RobotModule,
   ],
   controllers: [AppController, RobotController],
   providers: [AppService, RobotService, MovesService],

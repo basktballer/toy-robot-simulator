@@ -1,4 +1,4 @@
-import { Move } from 'src/robot/models/move.model';
+import { Move } from '../moves/models/move.model';
 export declare class MovesService {
     private moveModel;
     constructor(moveModel: typeof Move);

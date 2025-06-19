@@ -1,4 +1,9 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 export class PlaceRobotDto {
-  x?: number;
-  y?: number;
+  @ApiProperty()
+  x: number;
+
+  @ApiProperty()
+  y: number;
 }

@@ -19,80 +19,103 @@ const sequelize_1 = require("@nestjs/sequelize");
 const robot_model_1 = require("./models/robot.model");
 const helpers_1 = require("./utils/helpers");
 const sequelize_2 = require("sequelize");
+const robot_1 = require("./robot");
 let RobotService = RobotService_1 = class RobotService {
     robotModel;
     constructor(robotModel) {
         this.robotModel = robotModel;
     }
     logger = new common_1.Logger(RobotService_1.name);
-    async findAll() {
-        const data = await this.robotModel.findAll();
-        this.logger.log('found all', data);
-        return data;
-    }
     async getCurrentRobot() {
-        const robot = await this.robotModel.findOne({
-            order: [['createdAt', 'DESC']]
+        this.logger.log('getting current robot');
+        const robotData = await this.robotModel.findOne({
+            order: [['createdAt', 'DESC']],
         });
-        this.logger.log('last robot', robot?.dataValues);
-        return robot?.dataValues;
+        this.logger.log('last robot', robotData?.dataValues);
+        if (robotData) {
+            const { id, x, y, lastMove, facing } = robotData.dataValues;
+            const robot = new robot_1.Robot({
+                robotId: id,
+                x,
+                y,
+                lastMove,
+                facing: facing,
+            });
+            return robot;
+        }
+        return undefined;
     }
     async placeRobot(x = 0, y = 0) {
-        this.logger.log('Placing robot');
-        await this.robotModel.create({
+        this.logger.log(`placing robot, ${x}, ${y}`);
+        const robotData = await this.robotModel.create({
             x: x,
             y: y,
-            facing: "north"
+            facing: 'north',
+            lastMove: 0,
         });
+        const { id, x: placeX, y: placeY, lastMove, facing } = robotData.dataValues;
+        const robot = new robot_1.Robot({
+            robotId: id,
+            x: placeX,
+            y: placeY,
+            lastMove,
+            facing: facing,
+        });
+        return robot;
     }
     async moveRobot(id, facing) {
+        this.logger.log(`moving robot, ${id}, ${facing}`);
         if (facing === 'north') {
             await this.robotModel.increment({
-                y: 1
+                y: 1,
             }, {
                 where: {
                     y: {
                         [sequelize_2.Op.lt]: 4,
-                    }
-                }
+                    },
+                    id: id,
+                },
             });
         }
         else if (facing === 'east') {
             await this.robotModel.increment({
-                x: 1
+                x: 1,
             }, {
                 where: {
                     x: {
                         [sequelize_2.Op.lt]: 4,
-                    }
-                }
+                    },
+                    id: id,
+                },
             });
         }
         else if (facing === 'south') {
             await this.robotModel.decrement({
-                y: 1
+                y: 1,
             }, {
                 where: {
                     y: {
                         [sequelize_2.Op.gt]: 0,
-                    }
-                }
+                    },
+                    id: id,
+                },
             });
         }
         else if (facing === 'west') {
             await this.robotModel.decrement({
-                x: 1
+                x: 1,
             }, {
                 where: {
                     x: {
                         [sequelize_2.Op.gt]: 0,
-                    }
-                }
+                    },
+                    id: id,
+                },
             });
         }
     }
     async rotateRobot(direction, facing, id) {
-        console.log('props', direction, facing, id);
+        console.log('rotating robot', direction, facing, id);
         let newFace;
         if (direction === 'left') {
             newFace = (0, helpers_1.rotateLeft)(facing);
@@ -101,11 +124,11 @@ let RobotService = RobotService_1 = class RobotService {
             newFace = (0, helpers_1.rotateRight)(facing);
         }
         await this.robotModel.update({
-            facing: newFace
+            facing: newFace,
         }, {
             where: {
-                id: id
-            }
+                id: id,
+            },
         });
     }
 };
