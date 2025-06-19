@@ -4,22 +4,23 @@ import { Box, Typography } from '@mui/material'
 import { Stack, Button } from "@mui/material"
 import { initialize, moveRobot, placeRobot, rotateRobot } from '../api/methods'
 import { useState, useEffect } from 'react'
-import { Table } from './table'
+import { RobotBoard } from './robot-board'
 import { Robot } from '../models/robot'
 
-interface BoardProps {
-  initialRobot: Robot
+interface BoardContainerProps {
+  initialRobot?: Robot
 }
 
-export default function Board(
-  { initialRobot }: BoardProps
+export default function BoardContainer(
+  { initialRobot }: BoardContainerProps
 ) {
-  const [robot, setRobot] = useState<Robot>(initialRobot)
+  const [robot, setRobot] = useState<Robot|undefined>(initialRobot)
   const [keyPressCode, setKeyPressCode] = useState(0)
   const [reportToggle, setReportToggle] = useState(false)
 
+  // keyboard event listeners
   useEffect(() => {
-    function handleKeyDown(e) {
+    function handleKeyDown(e: KeyboardEvent) {
       // only action for arrow keys
       if (e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 37 || e.keyCode === 40) {
         setKeyPressCode(e.keyCode)
@@ -33,6 +34,7 @@ export default function Board(
     }
   }, []);
 
+  // keyboard effects
   useEffect(() => {
     if (keyPressCode === 38) {
       // up key
@@ -56,71 +58,82 @@ export default function Board(
     }
   }, [keyPressCode])
 
+  // helpers
   const toggleReport = () => {
     setReportToggle(!reportToggle)
     initialize()
   }
-  
+
+  // robot state update utils
   const upHandler = () => {
-    if (robot.facing === 'north') {
-      moveAndUpdate()
-    } else if (robot.facing === 'east') {
-      rotateAndUpdate('left')
-    } else {
-      // west and south (default right)
-      rotateAndUpdate('right')
+    if (robot) {
+      if (robot.facing === 'north') {
+        moveAndUpdate()
+      } else if (robot.facing === 'east') {
+        rotateAndUpdate('left')
+      } else {
+        // west and south (default right)
+        rotateAndUpdate('right')
+      }
     }
   }
 
   const rightHandler = () => {
-    if (robot.facing === 'east') {
-      moveAndUpdate()
-    } else if (robot.facing === 'south') {
-      rotateAndUpdate('left')
-    } else {
-      // north and west (default right)
-      rotateAndUpdate('right')
+    if (robot) {
+      if (robot.facing === 'east') {
+        moveAndUpdate()
+      } else if (robot.facing === 'south') {
+        rotateAndUpdate('left')
+      } else {
+        // north and west (default right)
+        rotateAndUpdate('right')
+      }
     }
   }
   
   const leftHandler = () => {
-    if (robot.facing === 'west') {
-      moveAndUpdate()
-    } else if (robot.facing === 'north') {
-      rotateAndUpdate('left')
-    } else {
-      // south and east (default right)
-      rotateAndUpdate('right')
+    if (robot) {
+      if (robot.facing === 'west') {
+        moveAndUpdate()
+      } else if (robot.facing === 'north') {
+        rotateAndUpdate('left')
+      } else {
+        // south and east (default right)
+        rotateAndUpdate('right')
+      }
     }
   }
 
   const downHandler = () => {
-    if (robot.facing === 'south') {
-      moveAndUpdate()
-    } else if (robot.facing === 'west') {
-      rotateAndUpdate('left')
-    } else {
-      // east and north (default right)
-      rotateAndUpdate('right')
+    if (robot) {
+      if (robot.facing === 'south') {
+        moveAndUpdate()
+      } else if (robot.facing === 'west') {
+        rotateAndUpdate('left')
+      } else {
+        // east and north (default right)
+        rotateAndUpdate('right')
+      }
     }
   }
 
   const rotateAndUpdate = async (direction: string) => {
-    const updatedRobot = await rotateRobot(robot.robotId, direction, robot.facing)
-    console.log('rotated', updatedRobot)
-    setRobot(updatedRobot)
+    if (robot) {
+      const updatedRobot = await rotateRobot(robot.robotId, direction, robot.facing)
+      setRobot(updatedRobot)
+    }
   }
 
   const placeAndUpdate = async (x: number, y: number) => {
     const updatedRobot = await placeRobot(x, y)
-    console.log('placed', updatedRobot)
     setRobot(updatedRobot)
   }
 
   const moveAndUpdate = async () => {
-    const updatedRobot = await moveRobot(robot.robotId, robot.facing)
-    console.log('moved', updatedRobot)
-    setRobot(updatedRobot)
+    if (robot) {
+      const updatedRobot = await moveRobot(robot.robotId, robot.facing)
+      setRobot(updatedRobot)
+    }
   }
 
   return (
@@ -131,10 +144,7 @@ export default function Board(
       // width="300px"
       flexDirection="column"
     >
-      <Table robot={robot} placeFunction={placeAndUpdate} />
-      {/* <Typography>{robot.x}</Typography>
-      <Typography>{robot.y}</Typography>
-      <Typography>{robot.facing}</Typography> */}
+      <RobotBoard robot={robot} placeFunction={placeAndUpdate} />
       <Stack marginY="2rem" direction="row" spacing={2}>
         <Button
           sx={{
@@ -146,7 +156,7 @@ export default function Board(
           }}
           variant='contained'
           onClick={() => rotateAndUpdate('left')}
-          >
+        >
           Left
         </Button>
         <Button
@@ -200,9 +210,9 @@ export default function Board(
             borderColor="#b3b3b3"
           >
             <Typography fontWeight="bold" align='center'>Report</Typography>
-            <Typography>{`x: ${robot.x}`}</Typography>
-            <Typography>{`y: ${robot.y}`}</Typography>
-            <Typography>{`facing: ${robot.facing}`}</Typography>
+            <Typography>{`x: ${robot ? robot.x : 'Not yet placed'}`}</Typography>
+            <Typography>{`y: ${robot ? robot.y : 'Not yet placed'}`}</Typography>
+            <Typography>{`facing: ${robot ? robot.facing : 'Not yet placed'}`}</Typography>
           </Box>
         )}
       </Box>

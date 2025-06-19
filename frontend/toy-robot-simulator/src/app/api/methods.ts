@@ -1,6 +1,7 @@
+import { Robot } from "../models/robot"
 
-
-export async function placeRobot(x: number, y: number) {
+export async function placeRobot(x: number, y: number): Promise<Robot> {
+  console.log('placing robot')
   const resp = await fetch('http://localhost:4000/robot/place', {
     method: 'POST',
     headers: {
@@ -12,11 +13,12 @@ export async function placeRobot(x: number, y: number) {
     })
   })
   const parseresp = await resp.json()
-  console.log('data', resp, parseresp)
+  console.log('placed robot successfully', parseresp)
   return parseresp
 }
 
-export async function rotateRobot(robotId: string, direction: string, facing: string) {
+export async function rotateRobot(robotId: string, direction: string, facing: string): Promise<Robot> {
+  console.log('rotating robot')
   const resp = await fetch('http://localhost:4000/robot/rotate', {
     method: 'PUT',
     headers: {
@@ -29,11 +31,12 @@ export async function rotateRobot(robotId: string, direction: string, facing: st
     })
   })
   const parseresp = await resp.json()
-  console.log('data', resp, parseresp)
+  console.log('rotated robot successfully',parseresp)
   return parseresp
 }
 
-export async function moveRobot(robotId: string, facing: string) {
+export async function moveRobot(robotId: string, facing: string): Promise<Robot>{
+  console.log('moving robot')
   const resp = await fetch('http://localhost:4000/robot/move', {
     method: 'PUT',
     headers: {
@@ -45,26 +48,25 @@ export async function moveRobot(robotId: string, facing: string) {
     })
   })
   const parseresp = await resp.json()
-  console.log('data', resp, parseresp)
+  console.log('moved robot successfully', parseresp)
   return parseresp
 }
 
-export async function initialize() {
+export async function initialize(): Promise<Robot|undefined> {
+  console.log('initializing, getting last position')
   const resp = await fetch('http://localhost:4000/robot/position', {
     method: 'GET',
     cache: "no-store"
   })
-  const parseresp = await resp.json()
-  if (isEmpty(parseresp)) {
-    return {
-      x: 0,
-      y: 0,
-      facing: 'north'
-    }
+  
+  // TODO: revisit this error, resp is empty both when data retrieved and when undefined returned
+  // as a result, for a new game, it errors out 
+  try {
+    const parseresp = await resp.json()
+    console.log('initialized - last position retrieved', parseresp)
+    return parseresp
+  } catch (e) {
+    console.debug('swallowing error', e)
+    return undefined
   }
-  return parseresp
-}
-
-function isEmpty(obj: Object) {
-  return Object.keys(obj).length === 0
 }

@@ -21,7 +21,7 @@ export class RobotController {
     this.logger.log('get position called')
     const robot = await this.robotService.getCurrentRobot()
     if (!robot) {
-      // if no data values, no robot found return null
+      // if no data values, no robot found return undefined
       return undefined
     }
     const { x, y, facing, id } = robot

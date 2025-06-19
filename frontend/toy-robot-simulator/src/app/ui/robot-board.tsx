@@ -1,21 +1,15 @@
-import { Table as MuiTable, TableBody, TableCell, TableRow } from "@mui/material"
+import { Table, TableBody, TableCell, TableRow } from "@mui/material"
 import { Tile } from "./tile"
 import { useEffect, useMemo, useState } from "react"
 import { Robot } from "../models/robot"
-
-export interface TileDetails {
-  isFaceLeft: boolean,
-  isFaceRight: boolean,
-  isFaceUp: boolean,
-  isFaceDown: boolean
-}
+import { TileDetails } from "./tile"
 
 export interface TableProps {
-  robot: Robot
+  robot?: Robot
   placeFunction: (x: number, y: number) => void
 }
 
-export function Table(props: TableProps) {
+export function RobotBoard(props: TableProps) {
 
   // initialize grid
   const grid = useMemo(() => {
@@ -23,11 +17,11 @@ export function Table(props: TableProps) {
   }, [])
   
   const { robot, placeFunction } = props
-  const [gridState, setGridState] = useState<Array<Array<TileDetails>>>([...grid])
+  const [gridState, ] = useState<Array<Array<TileDetails>>>([...grid])
   const [currentRobot, setCurrentRobot] = useState<Robot>()
 
   useEffect(() => {
-    if (gridState.length === 0) {
+    if (gridState.length === 0 || !robot) {
       return
     }
     if (currentRobot) {
@@ -57,7 +51,7 @@ export function Table(props: TableProps) {
   }
 
   return (
-    <MuiTable>
+    <Table>
       <TableBody>
         {gridState.map((row, rowIndex) => {
           const rowMap = row.map((col, colIndex) => {
@@ -78,7 +72,7 @@ export function Table(props: TableProps) {
           return <TableRow key={`tablerow-${rowIndex}`}>{rowMap}</TableRow>
         }).reverse()}
       </TableBody>
-    </MuiTable>
+    </Table>
   )
 }
 

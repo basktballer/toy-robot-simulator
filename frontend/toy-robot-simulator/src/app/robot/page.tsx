@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { initialize } from '../api/methods';
 import { Box, Typography } from '@mui/material';
-import Board from '../ui/board';
+import BoardContainer from '../ui/board-container';
 
 export default async function RobotPage() {
   const initialRobot = await initialize()
@@ -25,7 +25,7 @@ export default async function RobotPage() {
       >
         <Typography fontWeight="bold">Click to place the robot, use the buttons or arrows to move</Typography>
       </Box>
-      <Board initialRobot={initialRobot} />
+      <BoardContainer initialRobot={initialRobot} />
     </Box>
   )
 }

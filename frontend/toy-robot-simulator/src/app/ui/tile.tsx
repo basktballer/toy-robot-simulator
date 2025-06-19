@@ -4,7 +4,13 @@ import robotDown from '../assets/robot-down.png'
 import robotLeft from '../assets/robot-left.png'
 import robotRight from '../assets/robot-right.png'
 import robotUp from '../assets/robot-up.png'
-import { TileDetails } from "./table"
+
+export interface TileDetails {
+  isFaceLeft: boolean,
+  isFaceRight: boolean,
+  isFaceUp: boolean,
+  isFaceDown: boolean
+}
 
 interface TileProps {
   details: TileDetails
