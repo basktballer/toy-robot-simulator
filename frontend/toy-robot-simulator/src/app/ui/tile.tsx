@@ -1,39 +1,25 @@
 import { Box } from "@mui/material"
 import Image from 'next/image'
-import empty from '../assets/empty.png'
 import robotDown from '../assets/robot-down.png'
 import robotLeft from '../assets/robot-left.png'
 import robotRight from '../assets/robot-right.png'
 import robotUp from '../assets/robot-up.png'
+import { TileDetails } from "./table"
 
 interface TileProps {
-  details: {
-    isEmpty: boolean,
-    isFaceLeft: boolean,
-    isFaceRight: boolean,
-    isFaceUp: boolean,
-    isFaceDown: boolean
-  }
+  details: TileDetails
 }
 
-export function Tile({ details }: TileProps) {
+export function Tile(props: TileProps) {
 
+  const { details } = props
   const renderTile = () => {
-    if (details.isEmpty) {
-      return (
-        <Image
-          src={empty}
-          width={50}
-          height={50}
-          alt="empty tile"
-        />
-      )
-    } else if (details.isFaceLeft) {
+    if (details.isFaceLeft) {
       return (
         <Image
           src={robotLeft}
-          width={50}
-          height={50}
+          width={150}
+          height={150}
           alt="robot facing left"
         />
       )
@@ -41,8 +27,8 @@ export function Tile({ details }: TileProps) {
       return (
         <Image
           src={robotRight}
-          width={50}
-          height={50}
+          width={150}
+          height={150}
           alt="robot facing right"
         />
       )
@@ -50,8 +36,8 @@ export function Tile({ details }: TileProps) {
       return (
         <Image
           src={robotDown}
-          width={50}
-          height={50}
+          width={150}
+          height={150}
           alt="robot facing down"
         />
       )
@@ -59,8 +45,8 @@ export function Tile({ details }: TileProps) {
       return (
         <Image
           src={robotUp}
-          width={50}
-          height={50}
+          width={150}
+          height={150}
           alt="robot facing up"
         />
       )
@@ -69,7 +55,7 @@ export function Tile({ details }: TileProps) {
 
   return (
     <Box
-      bgcolor="#3f403f"
+      bgcolor="#364242"
       height="6rem"
       width="6rem"
       border="1px"

@@ -1,9 +1,10 @@
 import { Controller, Post, Get, Put, Body, Logger } from '@nestjs/common';
 import { PlaceRobotDto } from './dtos/place-robot.dto';
-import { RotateRobotDto } from './dtos/rotate-robot.dto';
+import { Facing, RotateRobotDto } from './dtos/rotate-robot.dto';
 import { RobotService } from './robot.service';
 import { MoveRobotDto } from './dtos/move-robot.dto';
 import { MovesService } from 'src/moves/moves.service';
+import { Robot } from './interfaces/robot.interface';
 
 @Controller('robot')
 export class RobotController {
@@ -15,19 +16,23 @@ export class RobotController {
   private readonly logger = new Logger(RobotController.name)
 
   @Get('position')
-  async currentPosition() {
+  async currentPosition(): Promise<Robot|undefined>
+  {
     this.logger.log('get position called')
     const robot = await this.robotService.getCurrentRobot()
     if (!robot) {
       // if no data values, no robot found return null
-      return null
+      return undefined
     }
-    const { x, y, facing } = robot.dataValues
-    return {
+    const { x, y, facing, id } = robot
+    const res = {
       x: x,
       y: y,
-      facing: facing
+      facing: facing as Facing,
+      robotId: id
     }
+    console.log(`returning, ${JSON.stringify(res)}`)
+    return res
   }
 
   @Post('place')

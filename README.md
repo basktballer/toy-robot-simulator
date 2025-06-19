@@ -60,15 +60,22 @@ User Actions
 - Implement Material UI for quicker styling
   - Needed to include NextJS integration steps for Material UI (AppRouterCacheProvider)
 - Hook up buttons to API calls, log out robot new positions
-- Create table with grid data structure
+- Create table component with grid data structure
+- Create an adapter that populates / updates the grid
 
 ## Assumptions: 
 - API should take in current robot id from the app, instead of knowing to move the latest. Improves query latency
 
 ## To do
-- Store robot id in a cookie? Fetch latest
+- Clean up API Helpers into a Service that creates classes
+- Once over each file
+  - Make good use of interfaces throughout front end, then set up backend the same
+  - Remove use less logs
+  - Add comments
+- Document run steps, linked #README?
+- Write test cases
 
 ## Nice to have
 - Batched writes to DB from the app
 - Websockets connection ? 
-- 
+- Store robot id in a cookie? Fetch latest

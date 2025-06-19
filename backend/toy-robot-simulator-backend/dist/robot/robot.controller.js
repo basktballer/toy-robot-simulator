@@ -32,14 +32,17 @@ let RobotController = RobotController_1 = class RobotController {
         this.logger.log('get position called');
         const robot = await this.robotService.getCurrentRobot();
         if (!robot) {
-            return null;
+            return undefined;
         }
-        const { x, y, facing } = robot.dataValues;
-        return {
+        const { x, y, facing, id } = robot;
+        const res = {
             x: x,
             y: y,
-            facing: facing
+            facing: facing,
+            robotId: id
         };
+        console.log(`returning, ${JSON.stringify(res)}`);
+        return res;
     }
     async place(placeRobotDto) {
         this.logger.log('place called');
