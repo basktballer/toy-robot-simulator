@@ -20,20 +20,24 @@ To run the app, you'll need to run the servers for both front end and backend ap
   - Use rest, simple enough application, don't need flexibility of GraphQL (select fields)
 
 ### Database Schema
-#### Requirements:
+#### Database Design Notes:
 - Need to have robot moves history
   - How do we store it? 
-    - JSON?
-    - In the table?
-      - One move per row?
+    - Ideas:
+      - JSON? Difficult to parse
+      - In the table?
+        - One move per row, might be the easiest
 - Wipe out if a new robot is placed on the grid
-  - Notion of multiple robots? 
+  - Notion of multiple robots
+- Robot should track it's own current positioning
+- Moves will track a ledger of historical moves by robotId
 #### Schemas
 - Robot Table Schema
   - id
   - x
   - y
   - facing
+  - last_move
   - timestamp
 - Moves Table Schema
   - id
